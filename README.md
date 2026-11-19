@@ -38,29 +38,29 @@ flowchart TD
     Client["Web Browser / HTTP Client"]
 
     subgraph Presentation["Presentation & Web Layer"]
-        JSP["JSP Views<br/>(login.jsp, signup.jsp, index.jsp)"]
-        LoginServlet["Login Servlet<br/>(/login)"]
-        SignupServlet["Signup Servlet<br/>(/signup)"]
-        TestServlet["Protected Test Servlet<br/>(/test - @ServletSecurity)"]
+        JSP["JSP Views<br/>login.jsp, signup.jsp, index.jsp"]
+        LoginServlet["Login Servlet<br/>/login"]
+        SignupServlet["Signup Servlet<br/>/signup"]
+        TestServlet["Protected Test Servlet<br/>/test - @ServletSecurity"]
     end
 
     subgraph Security["Jakarta Enterprise Security (JSR 375)"]
-        AuthMech["AuthMechanism<br/>(HttpAuthenticationMechanism)"]
+        AuthMech["AuthMechanism<br/>HttpAuthenticationMechanism"]
         SecContext["SecurityContext"]
         IdStoreHandler["IdentityStoreHandler"]
-        AppIdStore["AppIdentityStore<br/>(IdentityStore)"]
-        PasswordHash["PasswordUtil<br/>(SHA-256 Hashing)"]
+        AppIdStore["AppIdentityStore<br/>IdentityStore"]
+        PasswordHash["PasswordUtil<br/>SHA-256 Hashing"]
     end
 
     subgraph Service["Business & Service Layer"]
-        LoginSvc["LoginService<br/>(@RequestScoped)"]
-        SignupSvc["SignupService<br/>(@RequestScoped, @Transactional)"]
+        LoginSvc["LoginService<br/>@RequestScoped"]
+        SignupSvc["SignupService<br/>@RequestScoped, @Transactional"]
     end
 
     subgraph Persistence["Persistence & Database Layer"]
-        EM["EntityManager<br/>(PersistenceContext: JIAT-Security)"]
-        UserEntity["User Entity<br/>(@Entity, @Table)"]
-        UserRoleTable["user_role<br/>(@ElementCollection)"]
+        EM["EntityManager<br/>PersistenceContext: JIAT-Security"]
+        UserEntity["User Entity<br/>@Entity, @Table"]
+        UserRoleTable["user_role<br/>@ElementCollection"]
         MySQL[("MySQL 8.0+<br/>j2ee-security-orm")]
     end
 
@@ -69,19 +69,19 @@ flowchart TD
     Client -->|POST New Account| SignupServlet
     Client -->|Access Protected Endpoint| TestServlet
 
-    LoginServlet -->|authenticate()| SecContext
+    LoginServlet -->|Authenticate Request| SecContext
     SecContext --> AuthMech
     TestServlet -->|Container Security Interception| AuthMech
 
-    AuthMech -->|validate()| IdStoreHandler
+    AuthMech -->|Validate Credentials| IdStoreHandler
     IdStoreHandler --> AppIdStore
-    AppIdStore -->|validate() & getRoles()| LoginSvc
-    SignupServlet -->|hash()| PasswordHash
-    SignupServlet -->|register()| SignupSvc
+    AppIdStore -->|Validate & Query Roles| LoginSvc
+    SignupServlet -->|Hash Plaintext Password| PasswordHash
+    SignupServlet -->|Execute Registration| SignupSvc
 
-    LoginSvc -->|compare hash| PasswordHash
-    LoginSvc -->|NamedQuery: User.findByEmail| EM
-    SignupSvc -->|persist()| EM
+    LoginSvc -->|Verify SHA-256 Hash| PasswordHash
+    LoginSvc -->|Execute NamedQuery: User.findByEmail| EM
+    SignupSvc -->|Persist New User Entity| EM
 
     EM --> UserEntity
     UserEntity --> UserRoleTable
@@ -116,7 +116,7 @@ sequenceDiagram
     Svc-->>Store: Hash Match (true)
     Store->>Svc: getRoles(email)
     Svc->>DB: Fetch associated roles from user_role
-    DB-->>Svc: ['ADMIN', 'USER']
+    DB-->>Svc: Roles: ADMIN, USER
     Svc-->>Store: Set of roles
     Store-->>Security: CredentialValidationResult(VALID, caller, roles)
     Security-->>Servlet: notifyContainerAboutLogin(result)
@@ -135,7 +135,7 @@ erDiagram
     USER ||--o{ USER_ROLE : "has"
     USER {
         bigint id PK "AUTO_INCREMENT"
-        varchar email UK "User login email (unique)"
+        varchar email "Unique user login email"
         varchar name "Full display name"
         varchar password "SHA-256 password hash (64 hex)"
     }
