@@ -9,6 +9,23 @@
     <version>1.0</version>
     <packaging>war</packaging>
     <name>J2EE-Security-ORM</name>
+    <description>Enterprise Jakarta EE 10 Security Architecture with Custom HttpAuthenticationMechanism, AppIdentityStore, JPA/Hibernate ORM, and MySQL</description>
+    <url>https://github.com/theekshana-sudeepa/J2EE-Security-ORM</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Theekshana Sudeepa</name>
+            <url>https://github.com/theekshana-sudeepa</url>
+        </developer>
+    </developers>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
