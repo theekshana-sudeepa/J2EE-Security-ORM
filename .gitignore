@@ -1,39 +1,51 @@
+# Build artifacts
 target/
+build/
+dist/
+out/
+*.war
+*.ear
+*.class
+*.jar
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-.kotlin
 
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
+# Kotlin / IDE
+.kotlin/
+.idea/
 *.iml
 *.ipr
+*.iws
+.vscode/
 
-### Eclipse ###
-.apt_generated
+# Eclipse
+.apt_generated/
 .classpath
 .factorypath
 .project
-.settings
+.settings/
 .springBeans
-.sts4-cache
+.sts4-cache/
 
-### NetBeans ###
+# NetBeans
 /nbproject/private/
 /nbbuild/
-/dist/
-/nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
-.vscode/
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.local
+*.pem
+*.key
+*.keystore
+*.jks
 
-### Mac OS ###
+# Logs
+*.log
+logs/
+
+# Operating System metadata
 .DS_Store
+Thumbs.db
+Desktop.ini
